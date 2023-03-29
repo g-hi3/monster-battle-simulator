@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonBatSim.Console", "MonBatSim.Console\MonBatSim.Console.csproj", "{9D81CE1E-CEDE-44E0-A696-3ED5599B0E1F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonBatSim.ConsoleApp", "MonBatSim.ConsoleApp\MonBatSim.ConsoleApp.csproj", "{9D81CE1E-CEDE-44E0-A696-3ED5599B0E1F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonBatSim.Core", "MonBatSim.Core\MonBatSim.Core.csproj", "{AC18B5DA-E307-4C59-878D-BB8E977B3E62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonBatSim.Core.Test", "MonBatSim.Core.Test\MonBatSim.Core.Test.csproj", "{A98233F0-34DB-4E88-A204-E47EFDA8D7AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonBatSim.Console.Test", "MonBatSim.Console.Test\MonBatSim.Console.Test.csproj", "{34408305-E976-4B9D-8B7D-7079FE7B9DE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonBatSim.ConsoleApp.Test", "MonBatSim.ConsoleApp.Test\MonBatSim.ConsoleApp.Test.csproj", "{34408305-E976-4B9D-8B7D-7079FE7B9DE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

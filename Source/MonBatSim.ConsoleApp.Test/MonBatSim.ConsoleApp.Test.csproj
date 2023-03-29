@@ -6,6 +6,10 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
+
+        <AssemblyName>MonBatSim.ConsoleApp.Test</AssemblyName>
+
+        <RootNamespace>MonBatSim.ConsoleApp.Test</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MonBatSim.Console\MonBatSim.Console.csproj" />
+      <ProjectReference Include="..\MonBatSim.ConsoleApp\MonBatSim.ConsoleApp.csproj" />
     </ItemGroup>
 
 </Project>

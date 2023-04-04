@@ -5,46 +5,22 @@ namespace MonBatSim.ConsoleApp;
 
 internal static class Program
 {
+    private static readonly StackPrinter _stackPrinter = new();
+
     public static void Main()
     {
-        var fighterName = string.Empty;
-        var confirmedFighterName = false;
-        while (!confirmedFighterName)
-        {
-            PrintIntro();
-            PrintFighterNameQuery();
-            fighterName = QueryFighterName();
-            Console.Clear();
-            string? input = default;
-            while (input is not "Y" and not "N")
-            {
-                PrintIntro();
-                PrintFighterNameConfirmation(fighterName);
-                input = Console.ReadLine()?.Trim().ToUpper();
-                Console.Clear();
-            }
-
-            confirmedFighterName = input == "Y";
-        }
-        var monsterRace = MonsterRace.None;
-        while (!MonsterRaces.NamedValues.Contains(monsterRace))
-        {
-            PrintIntro();
-            PrintLabelledFighterName(fighterName);
-            Console.WriteLine();
-            PrintMonsterRaceQuery();
-            monsterRace = QueryMonsterRace();
-            Console.Clear();
-        }
+        _stackPrinter.Push("Monster Battle Simulator\n########################\n\n");
+        var fighterName = QueryFighterName();
+        _stackPrinter.Push($"Name: {fighterName}\n");
+        var monsterRaceInputProcessor = new MonsterRaceInputProcessor();
+        QueryForInput(monsterRaceInputProcessor);
+        _stackPrinter.Push($"Race: {monsterRaceInputProcessor.MonsterRace}\n\n");
         var statDistribution = new StatDistribution(10f);
         var statMenuItem = StatMenuItem.HealthPoints;
         var currentInput = new StringBuilder();
         while (true)
         {
-            Console.Clear();
-            PrintIntro();
-            PrintLabelledFighterName(fighterName);
-            PrintLabelledMonsterRace(monsterRace);
+            _stackPrinter.Print();
             PrintStatDistribution(statDistribution, statMenuItem, $"{currentInput}");
             Console.CursorVisible = statMenuItem is not StatMenuItem.None and not StatMenuItem.Confirm;
             var inputKey = Console.ReadKey();
@@ -81,6 +57,19 @@ internal static class Program
         
         Console.WriteLine("We're done here for now");
         Console.ReadKey();
+    }
+
+    private static string QueryFighterName()
+    { // The name ProcessFighterName is a work in process, because QueryFighterName is already taken at this point.
+        while (true)
+        {
+            var fighterNameInputProcessor = new FighterNameInputProcessor();
+            QueryForInput(fighterNameInputProcessor);
+            var confirmationInputProcessor = new ConfirmationInputProcessor($"Is \"{fighterNameInputProcessor.FighterName}\" fine (Y/N)?: ");
+            QueryForInput(confirmationInputProcessor);
+            if (confirmationInputProcessor.IsConfirmed)
+                return fighterNameInputProcessor.FighterName;
+        }
     }
 
     private static void UpdateStatInDistribution(
@@ -140,59 +129,6 @@ internal static class Program
         };
     }
 
-    private static void PrintIntro()
-    {
-        Console.WriteLine("Monster Battle Simulator");
-        Console.WriteLine("########################");
-        Console.WriteLine();
-    }
-
-    private static void PrintFighterNameQuery()
-    {
-        Console.Write("Enter fighter name: ");
-    }
-
-    private static void PrintFighterNameConfirmation(string fighterName)
-    {
-        Console.Write($"Is \"{fighterName}\" fine (Y/N)?: ");
-    }
-
-    private static void PrintLabelledFighterName(string fighterName)
-    {
-        Console.WriteLine($"Name: {fighterName}");
-    }
-
-    private static string QueryFighterName()
-    {
-        string? fighterName = default;
-        while (string.IsNullOrWhiteSpace(fighterName))
-            fighterName = Console.ReadLine();
-        return fighterName;
-    }
-
-    private static void PrintMonsterRaceQuery()
-    {
-        Console.WriteLine("Pick a race: ");
-        var orderedMonsterNames = MonsterRaces.NamedValues
-            .OrderBy(monsterRace => monsterRace)
-            .ToList();
-        orderedMonsterNames.ForEach(monsterRace => Console.WriteLine($" {(int)monsterRace}: {monsterRace}"));
-        (Console.CursorLeft, Console.CursorTop) = (13, Console.CursorTop - orderedMonsterNames.Count - 1);
-    }
-
-    private static MonsterRace QueryMonsterRace()
-    {
-        var stringValue = Console.ReadLine();
-        return int.TryParse(stringValue, out var intValue)
-            ? (MonsterRace) intValue
-            : MonsterRace.None;
-    }
-
-    private static void PrintLabelledMonsterRace(MonsterRace monsterRace)
-    {
-        Console.WriteLine($"Race: {monsterRace}");
-    }
-
     private static void PrintStatDistribution(
         StatDistribution statDistribution,
         StatMenuItem statMenuItem,
@@ -240,6 +176,17 @@ internal static class Program
             _ => 0
         };
         (Console.CursorLeft, Console.CursorTop) = (horizontalCursorPosition, Console.CursorTop - verticalCursorOffset);
+    }
+
+    private static void QueryForInput(IConsoleInputProcessor consoleInputProcessor)
+    {
+        _stackPrinter.Push(consoleInputProcessor.Label);
+        while (consoleInputProcessor.IsInputValid())
+        {
+            _stackPrinter.Print();
+            consoleInputProcessor.Process();
+        }
+        _stackPrinter.Pop();
     }
 
     private enum StatMenuItem

@@ -7,14 +7,9 @@ public class MonsterRaceInputProcessor : IConsoleInputProcessor
     private const string BaseLabel = "Pick a race: ";
     public MonsterRace MonsterRace { get; private set; } = MonsterRace.None;
 
-    public string Label =>
-        $"\n{BaseLabel}" + MonsterRaces.NamedValues
-            .OrderBy(monsterRace => monsterRace)
-            .Aggregate("", (totalString, monsterRace) => $"{totalString}\n {(int)monsterRace}: {monsterRace}");
-
     public bool IsInputValid()
     {
-        return !MonsterRaces.NamedValues.Contains(MonsterRace);
+        return MonsterRaces.NamedValues.Contains(MonsterRace);
     }
 
     public void Process()

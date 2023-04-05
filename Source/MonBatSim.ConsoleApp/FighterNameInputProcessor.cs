@@ -4,11 +4,9 @@ public class FighterNameInputProcessor : IConsoleInputProcessor
 {
     public string FighterName { get; private set; } = string.Empty;
 
-    public string Label => "Enter fighter name: ";
-    
     public bool IsInputValid()
     {
-        return string.IsNullOrWhiteSpace(FighterName);
+        return !string.IsNullOrWhiteSpace(FighterName);
     }
 
     public void Process()
